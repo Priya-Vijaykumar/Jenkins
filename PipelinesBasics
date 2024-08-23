@@ -76,3 +76,85 @@ pipeline {
         }
     }
 }
+
+Example:4
+
+pipeline {
+    agent none
+    stages {
+        stage ('stage1') {
+            agent any 
+            steps {
+                echo 'stage one'
+            }
+        }
+        stage ('stage2') {
+            agent { 
+                node {
+                    label 'demo'
+                    customWorkspace '/tmp/jenkins' 
+                }
+            }
+            steps {
+                echo 'stage two'
+            }
+        }
+    }
+}
+
+Example:5 ---- ENVIRONMENT variable block
+
+pipeline {
+    agent any
+    environment {
+        NAME = "PRIYA"
+    }
+    stages {
+        stage ('stage1') {
+            steps {
+                sh 'echo Name = "$NAME"'
+            }
+        }
+        stage ('stage2') {
+            agent { 
+                node {
+                    label 'demo'
+                    customWorkspace '/tmp/jenkins' 
+                }
+            }
+            steps {
+                echo env.NAME
+            }
+        }
+    }
+}
+
+Example:6 ---- ENVIRONMENT variable block
+
+pipeline {
+    agent any
+    environment {
+        NAME = "GLOBAL"
+    }
+    stages {
+        stage ('stage1') {
+ environment {
+        NAME = "LOCAL"
+    }
+steps {
+                sh 'echo Name = "$NAME"'
+            }
+        }
+        stage ('stage2') {
+            agent { 
+                node {
+                    label 'demo'
+                    customWorkspace '/tmp/jenkins' 
+                }
+            }
+            steps {
+                echo env.NAME
+            }
+        }
+    }
+}
