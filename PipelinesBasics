@@ -1,0 +1,78 @@
+Jenkins Pipeline
+================
+(series of tasks done in order on different servers)
+* Pipeline as Code
+* DSL - Groovy scripts
+  1. scripted pipeline
+  2. declarative pipeline
+* Jenkinsfile - Gitlab repository
+
+Syntax:
+------
+pipeline {
+ stages {
+   stage("stage1"){
+    agent { }
+    steps { }
+   }
+   stage("stage2"){
+    agent { }
+    steps { }
+   }
+ }
+}
+
+Example:1
+
+pipeline {
+    agent any
+    stages {
+        stage ('stage1') {
+            steps {
+                echo 'stage one'
+            }
+        }
+        stage ('stage2') {
+            steps {
+                echo 'stage two'
+            }
+        }
+    }
+}
+
+Example:2
+pipeline {
+    agent { label 'demo' }
+    stages {
+        stage ('stage1') {
+            steps {
+                echo 'stage one'
+            }
+        }
+        stage ('stage2') {
+            steps {
+                echo 'stage two'
+            }
+        }
+    }
+}
+
+Example:3
+
+pipeline {
+    agent none
+    stages {
+        stage ('stage1') {
+            agent any 
+            steps {
+                echo 'stage one'
+            }
+        }
+        stage ('stage2') {
+            agent { label 'demo' }
+            steps {
+                echo 'stage two'
+            }
+        }
+    }
+}
