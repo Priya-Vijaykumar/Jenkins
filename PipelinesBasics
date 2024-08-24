@@ -187,3 +187,161 @@ pipeline {
         }
     }
 }
+
+pipeline {
+    agent { label 'demo' }
+    options {
+   buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+    stages {
+        stage('Stage1') {
+            steps {
+                echo 'First Stage'
+            }
+        }
+   }
+}
+---------------------------
+pipeline {
+    agent { label 'demo' }
+    options {
+       retry(3)
+    }
+    stages {
+        stage('Stage1') {
+            steps {
+*                sh 'exit 1'
+             }
+        }
+        stage('stage2') {
+            steps {
+               sh 'echo Stage 2'
+            }
+        }
+     }
+}
+---------------------------
+pipeline {
+    agent { label 'demo' }
+    stages {
+        stage('Stage1') {
+             options {
+               retry(3)
+             }
+            steps {
+                sh 'exit 1'
+            }
+        }
+        stage('stage2') {
+            steps {
+               sh 'echo Stage 2'
+            }
+        }
+     }
+}
+------------------
+pipeline {
+    agent { label 'demo' }
+    options {
+          timeout(time: 15, unit: 'SECONDS')
+          
+		  timestamps()
+    }
+    stages {
+        stage('Stage1') {
+            steps {
+                sh 'sleep 5'
+            }
+        }
+        stage('Stage2') {
+            steps {
+                sh 'sleep 5'
+            }
+        }
+    }
+}
+-------------------------------
+pipeline {
+    agent { label 'demo' }
+    stages {
+        stage('Clone Repo') {
+            steps {
+                echo 'Going to Checkout from Git'
+                git changelog: false, poll: false, url: 'https://gitlab.com/scmlearningcentre/mavenbuild.git'
+                echo 'Completed Checkout from Git'
+            }
+        }
+    }
+}
+--------------------------------
+pipeline {
+    agent { label 'demo' }
+    stages {
+        stage('Stage1') {
+            steps {
+               build wait: false, job: 'child', parameters: [string(name: 'hosts', value: 'param1')]
+             }
+        }
+        stage('Stage2') {
+            steps {
+                echo 'Testing'
+            }
+        }
+    }
+}
+-----------------------------
+pipeline {
+    agent { label 'demo' }
+    stages {
+        stage('Stage1') {
+            steps {
+                  sh 'touch testfirst'
+                  dir('/tmp/jenkins') {
+                       sh 'touch DUMMY'
+                  }
+                  sh 'touch testlast'
+            }
+        }
+    }
+}
+-------------------------------
+pipeline {
+    agent any
+    stages {
+        stage('Stage1') {
+          steps {
+              catchError(buildResult: 'SUCCESS', message: 'YOU GOT A ERROR', stageResult: 'UNSTABLE') {
+                  sh "exit 1"
+              }
+          }
+        }
+       stage('Stage2') {
+            steps {
+                  echo 'Running Stage2'
+            }
+        }
+    }
+}
+
+pipeline {
+    agent any
+    environment { DEPLOY_TO = 'qa'}
+    stages {
+        stage('Stage1') {
+            when {
+                             environment name: 'DEPLOY_TO', value: 'qa'
+}
+            steps {
+                  echo 'Running Stage1 for QA'
+            }
+        }
+       stage('Stage2') {
+            when {
+   environment name: 'DEPLOY_TO', value: 'production'
+}
+            steps {
+                  echo 'Running Stage2 for production'
+            }
+        }
+    }
+}
