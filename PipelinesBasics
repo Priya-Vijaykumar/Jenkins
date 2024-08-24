@@ -188,6 +188,8 @@ pipeline {
     }
 }
 
+Buils discarder option:
+
 pipeline {
     agent { label 'demo' }
     options {
@@ -202,6 +204,8 @@ pipeline {
    }
 }
 ---------------------------
+Retry option:
+
 pipeline {
     agent { label 'demo' }
     options {
@@ -240,6 +244,8 @@ pipeline {
      }
 }
 ------------------
+Timeout option:
+
 pipeline {
     agent { label 'demo' }
     options {
@@ -261,6 +267,8 @@ pipeline {
     }
 }
 -------------------------------
+Git clone option:
+
 pipeline {
     agent { label 'demo' }
     stages {
@@ -274,6 +282,8 @@ pipeline {
     }
 }
 --------------------------------
+Build wait option:
+
 pipeline {
     agent { label 'demo' }
     stages {
@@ -290,6 +300,8 @@ pipeline {
     }
 }
 -----------------------------
+dir block:
+
 pipeline {
     agent { label 'demo' }
     stages {
@@ -305,6 +317,8 @@ pipeline {
     }
 }
 -------------------------------
+catch error block:
+
 pipeline {
     agent any
     stages {
