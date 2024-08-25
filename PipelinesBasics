@@ -359,3 +359,43 @@ pipeline {
         }
     }
 }
+
+parallel block:
+
+pipeline {
+    agent any
+    options {
+      timestamps()
+    }
+    stages {
+        stage ('Stage1') {
+            steps {
+                sh 'echo stage1'
+                sh 'sleep 10'
+            }
+        }
+        stage ('stage2') {
+            steps{
+                sh 'echo stage2'
+                sh 'sleep 10'
+            }
+        }
+        
+        stage ('stage3') {
+            parallel {
+                stage ('parallel1') {
+                    steps {
+                        sh 'echo parallel 1'
+                        sh 'sleep 10'
+                    }
+                }
+                stage ('parallel2') {
+                    steps {
+                        sh 'echo parallel 2'
+                        sh 'sleep 10'
+                }
+                }
+            }
+        }
+    }
+}
